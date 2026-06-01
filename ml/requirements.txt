@@ -1,0 +1,60 @@
+# ============================================================
+# Smart Insole — ML Requirements
+# ============================================================
+# Môi trường khuyến nghị: Python 3.10 hoặc 3.11
+# Lý do KHÔNG dùng 3.12: TensorFlow 2.15 chưa hỗ trợ đầy đủ 3.12
+#
+# Cài đặt:
+#   cd Smart\ Insole/
+#   python -m venv ml/.venv
+#   source ml/.venv/bin/activate          # Linux/macOS
+#   ml\.venv\Scripts\activate             # Windows
+#   pip install -r ml/requirements.txt
+# ============================================================
+
+# ------------------------------------------------------------
+# Deep Learning — core của pipeline
+# ------------------------------------------------------------
+tensorflow==2.15.1
+# tensorflow-metal==1.1.0   # ← bỏ comment nếu dùng Mac Apple Silicon (MPS)
+
+# keras đi kèm tensorflow, không cần cài riêng với tf>=2.12
+
+# ------------------------------------------------------------
+# Numerical / Signal Processing
+# ------------------------------------------------------------
+numpy==1.26.4               # tf 2.15 yêu cầu numpy <2.0
+scipy==1.13.1               # butter, filtfilt, decimate — dùng trong preprocess.py
+pandas==2.2.2               # đọc file .txt GaitPDB/GaitNDD
+
+# ------------------------------------------------------------
+# Machine Learning utilities
+# ------------------------------------------------------------
+scikit-learn==1.5.1         # LabelEncoder, train_test_split, class_weight,
+                            # classification_report, roc_auc_score, confusion_matrix
+
+# ------------------------------------------------------------
+# Visualization — evaluate.py vẽ confusion matrix + ROC
+# ------------------------------------------------------------
+matplotlib==3.9.2
+
+# ------------------------------------------------------------
+# Jupyter — chạy notebooks (01/02/03_*.ipynb)
+# ------------------------------------------------------------
+jupyter==1.0.0
+notebook==7.2.2
+ipykernel==6.29.5
+
+# ------------------------------------------------------------
+# Tiện ích
+# ------------------------------------------------------------
+tqdm==4.66.5                # progress bar khi load nhiều file
+joblib==1.4.2               # đi kèm sklearn, serialize model phụ
+
+# ============================================================
+# KHÔNG cần cài trong môi trường ml/ này:
+#   - fastapi, uvicorn, asyncpg, influxdb-client
+#     (chỉ dùng trong backend/)
+#   - torch / pytorch
+#     (dùng tensorflow, không dùng torch)
+# ============================================================

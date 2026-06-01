@@ -1,0 +1,92 @@
+# ============================================================
+# Smart Insole — .gitignore
+# ============================================================
+
+
+# ------------------------------------------------------------
+# Secrets & environment
+# ------------------------------------------------------------
+.env
+*.env
+!.env.example
+
+
+# ------------------------------------------------------------
+# Python (backend + ml)
+# ------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+
+# ------------------------------------------------------------
+# ML — data & model artifacts
+# (train lại được → không cần commit)
+# ------------------------------------------------------------
+ml/data/raw/
+ml/data/processed/
+
+ml/models/*.h5
+ml/models/*.pkl
+ml/models/evaluation/
+ml/models/report/
+ml/models/tensorboard_logs/
+
+# Giữ lại thư mục rỗng để git biết cấu trúc
+!ml/data/raw/.gitkeep
+!ml/data/processed/.gitkeep
+!ml/models/.gitkeep
+
+# Notebook temp files
+ml/notebooks/ml/
+
+
+# ------------------------------------------------------------
+# Frontend (Node / Vite / React)
+# ------------------------------------------------------------
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.env
+frontend/.env.local
+frontend/.env.*.local
+
+
+# ------------------------------------------------------------
+# Docker
+# ------------------------------------------------------------
+docker.log
+*.log
+
+
+# ------------------------------------------------------------
+# OS & editor
+# ------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+
+
+# ------------------------------------------------------------
+# Arduino / firmware
+# (build output, không commit)
+# ------------------------------------------------------------
+firmware/**/*.elf
+firmware/**/*.hex
+firmware/**/*.bin
+firmware/**/build/

@@ -1,0 +1,60 @@
+# ============================================================
+# Smart Insole — Backend Requirements
+# ============================================================
+# File này dành cho CONTAINER backend (Docker).
+# Bao gồm cả ML packages vì backend load TensorFlow để chạy inference.
+#
+# KHÔNG cài thủ công — Docker tự build:
+#   docker-compose up --build
+#
+# Nếu muốn dev local (ngoài Docker):
+#   cd Smart\ Insole/
+#   python -m venv backend/.venv
+#   source backend/.venv/bin/activate
+#   pip install -r backend/requirements.txt
+# ============================================================
+
+# ------------------------------------------------------------
+# Web Framework
+# ------------------------------------------------------------
+fastapi==0.111.1
+uvicorn[standard]==0.30.1        # [standard] = với watchfiles, httptools, websockets
+python-multipart==0.0.9          # cần cho file upload (báo cáo PDF)
+aiofiles==23.2.1                 # đọc/ghi file async
+
+# ------------------------------------------------------------
+# Data Validation
+# ------------------------------------------------------------
+pydantic==2.7.4
+pydantic-settings==2.3.4         # BaseSettings đọc .env
+
+# ------------------------------------------------------------
+# Database — PostgreSQL
+# ------------------------------------------------------------
+sqlalchemy==2.0.31
+psycopg2-binary==2.9.9           # PostgreSQL driver (binary = không cần libpq-dev khi cài)
+alembic==1.13.2                  # database migrations (dùng sau khi schema ổn định)
+
+# ------------------------------------------------------------
+# Database — InfluxDB (time-series sensor data)
+# ------------------------------------------------------------
+influxdb-client==1.44.0
+
+# ------------------------------------------------------------
+# ML / Inference
+# ------------------------------------------------------------
+# Backend cần TF vì ml_service.py import inference.py → TensorFlow
+tensorflow==2.15.1
+numpy==1.26.4                    # phải <2.0 để tương thích TF 2.15
+scipy==1.13.1                    # butter + filtfilt trong preprocess.py
+scikit-learn==1.5.1              # compute_class_weight dùng trong model.py
+
+# pandas cần vì inference.py → preprocess.py → import pandas
+# TODO: tách pandas ra khỏi process_realtime_window() sau khi xong frontend
+pandas==2.2.2
+
+# ------------------------------------------------------------
+# Utilities
+# ------------------------------------------------------------
+python-dotenv==1.0.1             # đọc .env khi dev local (pydantic-settings cũng đọc nhưng dotenv tiện hơn)
+httpx==0.27.0                    # HTTP client async (test + health check nội bộ)
