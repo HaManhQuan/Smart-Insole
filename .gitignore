@@ -90,3 +90,5 @@ firmware/**/*.elf
 firmware/**/*.hex
 firmware/**/*.bin
 firmware/**/build/
+ml/models/*.h5
+tempCodeRunnerFile.py

@@ -24,7 +24,7 @@ import SensorChart from '../components/SensorChart'
 import ResultDisplay from '../components/ResultDisplay'
 
 // ── Dev flag: mock BLE data (set false khi có firmware thật) ──────────────
-const MOCK_BLE = true
+const MOCK_BLE = import.meta.env.VITE_MOCK_BLE === 'true'
 
 // ── Flow steps ─────────────────────────────────────────────────────────────
 const STEP = {

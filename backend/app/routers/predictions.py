@@ -34,7 +34,7 @@ router = APIRouter(tags=["predictions"])
         503: {"model": ErrorResponse, "description": "Model chưa sẵn sàng"},
     },
 )
-def predict_window(
+async def predict_window(
     body: PredictionRequest,
     db:   Session = Depends(get_db),
 ):
@@ -73,7 +73,7 @@ def predict_window(
         )
 
     # Predict
-    prediction, latency_ms = ml_service.predict_window(body.window)
+    prediction, latency_ms = await ml_service.predict_window(body.window)
 
     # Lưu vào PostgreSQL
     saved = False

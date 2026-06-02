@@ -155,7 +155,7 @@ async def websocket_session(
                 # Flush buffer còn lại
                 leftover = accumulator.flush()
                 if leftover:
-                    pred, _ = ml_service.predict_window(leftover)
+                    pred, _ = await ml_service.predict_window(leftover)
                     try:
                         save_prediction(db, session_id, pred)
                     except Exception:
