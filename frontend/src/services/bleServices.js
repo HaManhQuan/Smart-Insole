@@ -44,7 +44,7 @@ export const BLEStatus = {
  * Parse ArrayBuffer 8 bytes thành object {s1, s2, s3, s4, ts}.
  *
  * Byte layout:
- *   [0,1] = S1 big-endian uint16  (ADS1115)
+ *   [0,1] = S1 big-endian uint16  (ESP32 ADC)
  *   [2,3] = S2 big-endian uint16  (ADS1115)
  *   [4,5] = S3 big-endian uint16  (ESP32 ADC)
  *   [6,7] = S4 big-endian uint16  (ESP32 ADC)
@@ -111,10 +111,7 @@ class BLEService {
       // 1. Scan — mở dialog chọn thiết bị
       this._setStatus(BLEStatus.SCANNING)
       this._device = await navigator.bluetooth.requestDevice({
-        filters: [
-          { namePrefix: DEVICE_NAME_PREFIX },
-          { services: [BLE_SERVICE_UUID] },
-        ],
+        acceptAllDevices: true,
         optionalServices: [BLE_SERVICE_UUID],
       })
 

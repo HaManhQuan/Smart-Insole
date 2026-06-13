@@ -100,12 +100,16 @@ uint16_t readADCOversampled(uint8_t pin) {
 // Helper: đọc ADS1115 channel 0 (S2)
 // ---------------------------------------------------------------------------
 
+uint16_t _lastS2 = 0;
+
 uint16_t readADS1115() {
   if (!adsReady) return 0;
-  int16_t raw = ads.readADC_SingleEnded(0);
+  if (!ads.conversionComplete()) return _lastS2;
+  int16_t raw = ads.getLastConversionResults();
   if (raw < 0) raw = 0;
   uint16_t val = (uint16_t)raw;
-  return (val > 26400) ? 0 : (26400 - val);
+  _lastS2 = (val > 26400) ? 0 : (26400 - val);
+  return _lastS2;
 }
 
 // ---------------------------------------------------------------------------
@@ -154,9 +158,9 @@ void setup() {
 
   // ADC ESP32
   analogReadResolution(12);
-  pinMode(PIN_S1, INPUT);
-  pinMode(PIN_S3, INPUT);
-  pinMode(PIN_S4, INPUT);
+  pinMode(PIN_S1, INPUT_PULLUP);
+  pinMode(PIN_S3, INPUT_PULLUP);
+  pinMode(PIN_S4, INPUT_PULLUP);
   analogSetPinAttenuation(PIN_S1, ADC_11db);
   analogSetPinAttenuation(PIN_S3, ADC_11db);
   analogSetPinAttenuation(PIN_S4, ADC_11db);
@@ -170,8 +174,9 @@ void setup() {
     Serial.println("  Kiểm tra: SDA→D4, SCL→D5, VDD→3.3V, ADDR→GND");
   } else {
     ads.setGain(GAIN_ONE);               // ±4.096V, 3.3V → max ~26400
-    ads.setDataRate(RATE_ADS1115_250SPS);
-    Serial.println("[OK] ADS1115 sẵn sàng (GAIN_ONE)");
+    ads.setDataRate(RATE_ADS1115_860SPS);
+    ads.startADCReading(ADS1X15_REG_CONFIG_MUX_SINGLE_0, /*continuous=*/true);
+    Serial.println("[OK] ADS1115 sẵn sàng (GAIN_ONE, continuous 860SPS)");
   }
 
   // NimBLE

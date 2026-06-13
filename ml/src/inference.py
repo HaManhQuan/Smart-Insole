@@ -32,8 +32,7 @@ logging.basicConfig(
 )
 log = logging.getLogger(__name__)
 
-MODEL_PATH        = Path("ml/models/lstm_v1.h5")
-EVAL_METRICS_PATH = Path("ml/models/evaluation/metrics.json")
+MODEL_PATH        = Path("ml/models/lstm_2606010220.h5")
 
 # Ngưỡng confidence mặc định — window có max_proba < threshold
 # sẽ trả về label "uncertain" thay vì predict sai
@@ -144,10 +143,17 @@ class InferenceEngine:
 
     def _load_metrics(self) -> Optional[dict]:
         """Load metrics.json từ evaluate.py để backend có thể expose model info."""
-        if EVAL_METRICS_PATH.exists():
-            with open(EVAL_METRICS_PATH, encoding="utf-8") as f:
+        import glob
+        pattern = str(Path("ml/models/report") / "*" / "evaluation" / "metrics.json")
+        candidates = sorted(glob.glob(pattern), reverse=True)
+        if candidates:
+            with open(candidates[0], encoding="utf-8") as f:
                 return json.load(f)
-        log.warning("Không tìm thấy %s — model chưa được evaluate", EVAL_METRICS_PATH)
+        fallback = Path("ml/models/evaluation/metrics.json")
+        if fallback.exists():
+            with open(fallback, encoding="utf-8") as f:
+                return json.load(f)
+        log.warning("Không tìm thấy metrics.json — model chưa được evaluate")
         return None
 
     # ------------------------------------------------------------------

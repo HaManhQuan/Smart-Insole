@@ -190,10 +190,15 @@ export default function Examination({ patientId: initPatientId, onBack, onFinish
     setStatusMsg('Đang tổng hợp kết quả…')
     disconnect()
     wsConn.endSession()
-    // diagnosis sẽ đến qua onDiagnosis callback
-    // fallback: nếu 10s không có → gọi REST
+
+    // Gọi PATCH /sessions/{id}/end để backend finalize
+    try {
+      await api.sessions.end(session.id)
+    } catch {}
+
+    // Lấy diagnosis sau khi end
     setTimeout(async () => {
-      if (!diagnosis && session) {
+      if (session) {
         try {
           const diag = await api.sessions.diagnosis(session.id)
           setDiagnosis(diag)
@@ -201,8 +206,8 @@ export default function Examination({ patientId: initPatientId, onBack, onFinish
           setStatusMsg('')
         } catch {}
       }
-    }, 10000)
-  }, [wsConn, disconnect, diagnosis, session])
+    }, 3000)
+  }, [wsConn, disconnect, session])
 
   // ── Cleanup khi unmount ───────────────────────────────────────────
   useEffect(() => () => { wsConn?.close(); disconnect() }, [])

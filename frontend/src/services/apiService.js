@@ -150,8 +150,11 @@ const predictions = {
 // Health
 // ---------------------------------------------------------------------------
 
+const BACKEND_ROOT = (import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1')
+  .replace(/\/api\/v1$/, '')
+
 const health = {
-  check: () => http.get('/health', { baseURL: 'http://localhost:8000' }),
+  check: () => http.get('/health', { baseURL: BACKEND_ROOT }),
 }
 
 // ---------------------------------------------------------------------------

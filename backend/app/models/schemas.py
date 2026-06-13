@@ -41,7 +41,7 @@ class GaitLabel(IntEnum):
         mapping = {0: "Normal", 1: "Parkinson", 2: "Abnormal", -1: "Uncertain"}
         return mapping.get(value, "Unknown")
 
-
+from enum import Enum
 class SessionStatus(str):
     ACTIVE    = "active"
     COMPLETED = "completed"
@@ -124,10 +124,10 @@ class SensorWindow(BaseModel):
     1 cửa sổ dữ liệu gồm 100 timestep × 4 sensor.
     Gửi từ frontend → POST /sessions/{id}/data hoặc qua WebSocket.
 
-    s1: ụ ngón cái   — ADS1115 (0–32767)
-    s2: ngón cái      — ADS1115 (0–32767)
-    s3: ụ ngón út    — ESP32 ADC (0–4095)
-    s4: gót chân      — ESP32 ADC (0–4095)
+    s1: ụ ngón cái      — ESP32 ADC (0–4095)
+    s2: ngón cái        — ADS1115 3.3V (0–26400)
+    s3: ụ ngón út       — ESP32 ADC (0–4095)
+    s4: gót chân        — ESP32 ADC (0–4095)
     """
     session_id:  int
     window_id:   int                       = Field(..., ge=0)

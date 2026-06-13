@@ -36,7 +36,7 @@ from app.services.db_service import (
     get_influx,
     save_prediction,
     InfluxDBService,
-    PredictionORM,
+    get_predictions_by_session,
 )
 from app.services.ml_service import ml_service, WindowAccumulator
 
@@ -163,9 +163,7 @@ async def websocket_session(
                     await _send(ws, WSMessageType.WINDOW_RESULT, pred.model_dump())
 
                 # Tổng hợp chẩn đoán
-                pred_rows = db.query(
-                    PredictionORM
-                ).filter_by(session_id=session_id).all()
+                pred_rows = get_predictions_by_session(db, session_id)
 
                 from app.models.schemas import WindowPrediction
                 predictions = [

@@ -45,7 +45,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 PROCESSED_DIR  = Path("ml/data/processed")
-MODEL_PATH     = Path("ml/models/lstm_v1.h5")
+MODEL_PATH     = Path("ml/models/lstm_2606010220.h5")
 from datetime import datetime
 _EVAL_TS = datetime.now().strftime("%y%m%d%H%M")
 EVAL_DIR = Path("ml/models/report") / _EVAL_TS / "evaluation"

@@ -103,7 +103,7 @@ export default function SensorChart({ sensorData, isConnected, height = 280 }) {
         ticks: {
           color: '#475569',
           font: { size: 10 },
-          callback: (v) => v.toLocaleString(),
+          callback: (v) => v.toFixed(1),
         },
         grid: { color: '#2D354850' },
         border: { color: '#2D3548' },
@@ -138,7 +138,7 @@ export default function SensorChart({ sensorData, isConnected, height = 280 }) {
       {/* Y-axis hint */}
       {!isEmpty && (
         <div style={styles.hint}>
-          ADS1115: 0 – 32,767 &nbsp;·&nbsp; ESP32 ADC: 0 – 4,095
+          Normalized 0 – 1 &nbsp;·&nbsp; S1,S3,S4: ÷4095 &nbsp;·&nbsp; S2: ÷26400
         </div>
       )}
     </div>
@@ -174,13 +174,15 @@ function EmptyState({ isConnected }) {
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 
+const SENSOR_MAX = { s1: 4095, s2: 26400, s3: 4095, s4: 4095 }
 function makeDataset(key, data) {
   const color = SENSOR_COLORS[key]
   const lineColor = typeof color === 'object' ? color.line : color
   const fillColor = typeof color === 'object' ? color.fill : color + '10'
+  const normalized = data.map(v => parseFloat((v / SENSOR_MAX[key]).toFixed(4)))
   return {
     label:           SENSOR_LABELS[key],
-    data,
+    data:            normalized,
     borderColor:     lineColor,
     backgroundColor: fillColor,
     borderWidth:     1.5,
